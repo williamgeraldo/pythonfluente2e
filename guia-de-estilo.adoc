@@ -11,69 +11,100 @@ Os termos abaixo geram dúvidas sobre tradução:
 se devem ser traduzidos ou não, e qual tradução adotar.
 Estas foram as decisões que tomamos nesta tradução.
 
+Quando o termo em inglês for adotado, faremos uma
+opção de gênero do substantivo.
+Ex.: o _framework_ (s.m.), a _thread_ (s.f.)
+
+A opção será subjetiva, baseada no uso cotidiano na
+bolha dev ao redor do autor.
+Para manter a consistência, a opção de gênero está registrada
+nos termos adotados em inglês na tabela.
+
 Sempre que um desses termos aparecer pela primeira vez no livro,
 o termo adotado deve ser seguido da alternativa no outro idioma,
 para familiarizar a leitora com o vocabulário nos dois idiomas.
-O termo em inglês deve ser escrito em itálico (_italic_).
 
-Exemplos: embutido _(built-in)_, _cluster_ (agrupamento).
+O termo em inglês deve ser sempre escrito em itálico. Se houver parênteses em torno do termo em inglês,
+o parênteses também deve estar em itálico _(italic)_.
+
+Exemplos:
+
+Termo em português adotado::
+    embutido _(built-in)_
+
+Termo em inglês adotado::
+    _o cluster_ (agrupamento)
+
+**Legenda**
+
+[cols="1,10"]
+|===
+|✅| termo adotado
+|❗| termo não adotado
+|❓| não conhecemos uma boa tradução
+|🔎| possíveis ocorrências para buscar e corrigir
+|===
+
 
 [cols="3,3,4"]
 |===
 |🇺🇸|🇧🇷|Observações
-
-
 |❗ _abstract base class_ |✅ classe base abstrata| plural: classes bases abstratas
-|✅ _aliasing_     |❗ apelidamento |
-|❗ _built-in_     |✅ embutido   |
-|✅ _caching_      |❗            | não conhecemos uma boa tradução
-|❗ _callable_     |✅ invocável  | evitar: chamável
-|✅ _callback_     |❗ função de tratamento | função que trata o evento
-|❗ _closure_      |✅ clausura   |
-|✅ _cluster_      |❗ agrupamento|
-|❗ _container_    |✅ contêiner  | plural: contêineres
-|❗ _contention_   |✅ disputa    |
-|❗ _core_         |✅ núcleo     | "CPU de 8 núcleos"
-|❗ _coroutine_    |✅ corrotina  |
-|❗ _CPU bound_    |✅ limitado pela CPU |
-|✅ _deadlock_     |❗ impasse    |
-|❗ _duck typing_  |✅ tipagem pato |
-|❗ _evaluate_     |✅ avaliar   | contraste com "analisar" (_parse_)
-|❗ _evaluation_   |✅ avaliação |
-|❗ _factory_      |✅ fábrica    |
-|✅ _framework_    |❗ arcabouço  | "a framework"
-|❗ _Further Reading_ |✅ Para saber mais| título de seção (note: apenas 1ª letra maiúscula)
-|✅ _future_       |❗            | não conhecemos uma boa tradução
-|❗ _goose typing_ | ✅ tipagem ganso |
-|✅ _hashable_     |❗            | não conhecemos uma boa tradução
-|✅ _hook_         |❗gancho      |
-|❗ _I/O bound_    | ✅ limitado por E/S |
-|❗ _lock_ | ✅ trava |
-|❗ _match_ (s.) | ✅ casamento | substantivo; aplica-se a `match/case` e `re.match`
-|❗ _match_ (v.) | ✅ casar | verbo; aplica-se a `match/case` e `re.match`
-|✅ _offset_ | ❗ deslocamento | "o offset"
-|❗ _overloading_| ✅ sobrecarga |
+|✅ _alias_ (s.m.)     |❗ apelido      |
+|✅ _aliasing_ (s.m.)  |❗ apelidamento |
+|✅ _array_ (s.m.)     |❗ arranjo      | 🔎 a array
+|❗ _built-in_         |✅ embutido     |
+|✅ _cache_ (s.m.)     |❓              |
+|✅ _caching_ (s.m.)   |❓              |
+|❗ _callable_         |✅ invocável (s.m.) | 🔎 chamável
+|✅ _callback_ (s.f.)  |❗ função que trata o evento | 🔎 função de retorno
+|❗ _closure_          |✅ clausura     | preserva variáveis livres no momento da definição da função
+|✅ _cluster_ (s.m.)   |❓              | 🔎 agrupamento
+|❗ _container_        |✅ o contêiner  | plural: contêineres
+|❗ _contention_       |✅ disputa      |
+|❗ _core_             |✅ núcleo       | "CPU de 8 núcleos"
+|❗ _coroutine_        |✅ corrotina    |
+|❗ _CPU bound_        |✅ limitado pela CPU |
+|✅ _deadlock_ (s.m.)  |❗ impasse      |
+|❗ _duck typing_      |✅ tipagem pato |
+|❗ _evaluate_         |✅ avaliar      | contraste com "analisar" (_parse_)
+|❗ _evaluation_       |✅ avaliação    |
+|❗ _factory_          |✅ fábrica      |
+|✅ _framework_ (s.m.) |❗ arcabouço    | 🔎 a framework
+|❗ _Further Reading_  |✅ Para saber mais| título de seção (note: apenas 1ª letra maiúscula)
+|✅ _future_ (s.m.)    |❓            |
+|❗ _goose typing_     | ✅ tipagem ganso |
+|✅ _hashable_ (adj.)  |❓            |
+|✅ _hook_ (s.m.)      |❗gancho      |
+|❗ _I/O bound_        | ✅ limitado por E/S |
+|❗ _keyword argument_ | ✅ argumento nomeado | 🔎 argumento de palavra-chave
+|❗ _lock_             | ✅ trava  |
+|❗ _match_ (s.m.)     | ✅ casamento | substantivo; aplica-se a `match/case` e `re.match`
+|❗ _match_ (v.)       | ✅ casar | verbo; aplica-se a `match/case` e `re.match`
+|✅ _offset_ (s.m.)    | ❗ deslocamento | 🔎 a offset
+|❗ _overloading_      | ✅ sobrecarga |
 |❗ _overloaded signatures_ |✅ assinaturas sobrecarregadas|
-|❗ _parse_        |✅ analise (ou análise sintática) | contraste com "avaliar" (_evaluate_)
-|✅ _parser_       |❗ analisador sintático| "o parser"
-|❗ _pattern_      |✅ padrão      | aplica-se a `match/case` e `re.match`
-|✅ _pattern matching_      |❗ casamento de padrões|
-|❗ _performance_  |✅ desempenho      |
-|❗ _query_        |✅ consulta        |
-|❗ _queue_        |✅ fila            |
-|❗ _S-expression_ |✅ expressão-S     |
-|❗ _stack_        |✅ pilha           |
-|❗ _statement_    |✅ instrução       |
-|✅ _status_       |❗                 | não conhecemos uma boa tradução
-|❗ _subject_      |✅ sujeito         | no contexto de casamento de padrões
-|✅ _thread_       |❗                 | "a thread"
-|❗ _tuple_        |✅ tupla           | usar 🇧🇷 exceto menção específica à classe `tuple`
-|❗ _type hint_    |✅ dica de tipo    |
-|❗ _type variable_|✅ variável de tipo|
-|❗ _type-driven development_|✅ desenvolvimento orientado a tipos|
+|❗ _parse_            |✅ analise (ou análise sintática) | contraste com "avaliar" (_evaluate_)
+|✅ _parser_ (s.m.)    |❗ analisador sintático| 🔎 a parser
+|❗ _pattern_          |✅ padrão      | aplica-se a `match/case` e `re.match`
+|✅ _pattern matching_ (s.m.)|❗ casamento de padrões| ver. _match_
+|❗ _performance_      |✅ desempenho      |
+|❗ _query_            |✅ consulta        |
+|❗ _queue_            |✅ fila            |
+|❗ _receiver_         |✅ receptor        | 🔎 recebido, recipiente, destinatário
 |❗ _return_ (flow control)  |✅ retorna | "A função retorna após 10s."
 |❗ _return_ (value)         |✅ devolve | "A função devolve a lista de estudantes."
-
+|❗ _S-expression_     |✅ expressão-S     |
+|❗ _stack_            |✅ pilha           |
+|❗ _statement_        |✅ instrução       |
+|✅ _status_ (s.m.)    |❗ situação        |
+|❗ _subject_          |✅ sujeito         | no contexto de _pattern matching_
+|✅ _thread_ (s.f.)    |❓                 | "a thread"
+|❗ _tuple_            |✅ tupla           | usar 🇧🇷 exceto menção específica à classe `tuple`
+|❗ _type hint_        |✅ dica de tipo    |
+|❗ _type variable_    |✅ variável de tipo|
+|❗ _type-driven development_|✅ desenvolvimento orientado a tipos|
+|❗ _weak reference_|✅ referência fraca   |
 |===
 
 

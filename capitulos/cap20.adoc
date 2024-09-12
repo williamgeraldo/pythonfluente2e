@@ -29,7 +29,7 @@ e alguns comentários sensatos (oxalá) sobre threads e outras formas de concorr
 Este((("concurrent executors", "purpose of"))) capítulo se concentra nas classes do `concurrent.futures.Executor`,
 que encapsulam o modelo de "gerar um monte de threads independentes e coletar os resultados em uma fila" descrito por Michele Simionato.
 Executores concorrentes tornam o uso desse modelo quase trivial,
-não apenas com threads mas também com processos—úteis para tarefas de processamento intensivo.
+não apenas com threads mas também com processos—úteis para tarefas de processamento intensivo em CPU.
 
 Também((("futures", "definition of term"))) introduzo aqui o conceito de
 _futures_—objetos que representam a execução assíncrona de uma operação, similares às _promises_ do Javascript.
@@ -38,18 +38,18 @@ Essa ideia básica é a fundação de `concurrent.futures` bem como do pacote `a
 
 === Novidades nesse capítulo
 Renomeei((("concurrent executors", "significant changes to"))) este capítulo de "Concorrência com futures" para "Executores concorrentes", porque os executores são o recurso de alto nível mais importante tratado aqui.
-_Futures_ são objetos de baixo nível, tratados na seção <<where_futures_sec>>,
+_Futures_ são objetos de baixo nível, tratados na <<where_futures_sec>>,
 mas quase invisíveis no resto do capítulo.
 
 Todos os exemplos de clientes HTTP agora usam a nova biblioteca https://fpy.li/httpx[_HTTPX_], que oferece APIs síncronas e assíncronas.
 
-A configuração para os experimentos na seção <<flags2_sec>> ficou mais simples,
+A configuração para os experimentos na <<flags2_sec>> ficou mais simples,
 graças ao servidor de múltiplas threads adicionado ao pacote https://fpy.li/20-2[`http.server`] no Python 3.7.
 Antes, a biblioteca padrão oferecia apenas o `BaseHttpServer` de thread única,
 que não era adequado para experiências com clientes concorrentes,
 então na primeira edição desse livro precisei usar um servidor externo.
 
-A seção <<launching_processes_sec>> agora demonstra como um executor simplifica o código que vimos na <<code_for_multicore_prime_sec>>.
+A <<launching_processes_sec>> agora demonstra como um executor simplifica o código que vimos na <<code_for_multicore_prime_sec>>.
 
 Por fim, movi a maior parte da teoria para o novo <<concurrency_models_ch>>.
 
@@ -127,7 +127,7 @@ Mais adiante nesse capítulo usaremos o pacote `http.server` do Python para exec
 Vamos agora estudar as implementações de dois dos scripts testados no <<ex_flags_sample_runs>>: _flags.py_ e _flags_threadpool.py_. Vou deixar o terceiro, _flags_asyncio.py_, para o <<async_ch>>, mas queria demonstrar os três juntos para fazer duas observações:
 
 . Independente dos elementos de concorrência que você use—threads ou corrotinas—haverá um ganho enorme de desempenho sobre código sequencial em operações de E/S de rede, se o script for escrito corretamente.
-. Para clientes HTTP que podem controlar quantas requisições eles fazem, não há diferenças significativas de desempenho entre threads e corrotinas.footnote:[Para servidores que podem ser acessados por muitos clientes, há uma diferença: as corrotinas escalam melhor, pois usam menos memória que as threads, e também reduzem o custo das mudanças de contexto, que mencionei na seção <<thread_non_solution_sec>>.]
+. Para clientes HTTP que podem controlar quantas requisições eles fazem, não há diferenças significativas de desempenho entre threads e corrotinas.footnote:[Para servidores que podem ser acessados por muitos clientes, há uma diferença: as corrotinas escalam melhor, pois usam menos memória que as threads, e também reduzem o custo das mudanças de contexto, que mencionei na <<thread_non_solution_sec>>.]
 
 Vamos ver o código.((("", startref="IOconcur20")))
 
@@ -253,23 +253,23 @@ Elas tem o mesmo propósito:
 uma instância de qualquer das classes `Future` representa um processamento adiado,
 que pode ou não ter sido completado.
 Isso é algo similar à classe `Deferred` no Twisted,
-a classe `Future` no Tornado, e `Promisse` no Javascript moderno.
+a classe `Future` no Tornado, e objetos `Promise` no Javascript moderno.
 
 Os _futures_ encapsulam operações pendentes de forma que possamos colocá-los em filas,
 verificar se terminaram, e recuperar resultados (ou exceções) quando eles ficam #disponíveis#.
 
 Uma coisa importante de saber sobre _futures_ é eu e você, não devemos criá-los:
-eles são feitos para serem instanciados exclusivamente pela framework de concorrência,
+eles são feitos para serem instanciados exclusivamente pelo framework de concorrência,
 seja ela a `concurrent.futures` ou a `asyncio`.
-O motivo é que um `Future` representa algo que vai ser executado em algum momento,
-portanto precisa ser agendado para rodar, e quem agenda tarefas é a framework.
+O motivo é que um `Future` representa algo que será executado em algum momento,
+portanto precisa ser agendado para rodar, e quem agenda tarefas é o framework.
 
 Especificamente, instâncias `concurrent.futures.Future` são criadas apenas como resultado da submissão de um objeto invocável (_callable_)
 para execução a uma subclasse de `concurrent.futures.Executor`.
 Por exemplo, o método `Executor.submit()` recebe um invocável, agenda sua execução e retorna um `Future`.
 
 O código da aplicação não deve mudar o estado de um _future_:
-a framework de concorrência muda o estado de um _future_ quando o processamento que ele representa termina, e não temos como controlar quando isso acontece.
+o framework de concorrência muda o estado de um _future_ quando o processamento que ele representa termina, e não temos como controlar quando isso acontece.
 
 Ambos os tipos de `Future` tem um método `.done()` não-bloqueante, que retorna um Boolean informando se o invocável encapsulado por aquele `future` foi ou não executado.
 Entretanto, em vez de perguntar repetidamente se um _future_ terminou, o código cliente em geral pede para ser notificado.
@@ -396,7 +396,7 @@ Vamos voltar ao exemplo de teste de verificação de números primos de<<naive_m
 [[multicore_prime_redux_sec]]
 ==== Verificador de primos multinúcleo redux
 
-Na seção <<code_for_multicore_prime_sec>>, estudamos _procs.py_, um script que verificava se alguns números grandes eram primos usando `multiprocessing`.
+Na <<code_for_multicore_prime_sec>>, estudamos _procs.py_, um script que verificava se alguns números grandes eram primos usando `multiprocessing`.
 No <<proc_pool_py>> resolvemos o mesmo problema com o programa _proc_pool.py_, usando um pass:[<code>ProcessPool&#x200b;Executor</code>]. Do primeiro `import` até a chamada a `main()` no final, _procs.py_ tem 43 linhas de código não-vazias, e _proc_pool.py_ tem 31—28% mais curto.
 
 [[proc_pool_py]]
@@ -490,7 +490,7 @@ Vamos((("concurrent executors", "Executor.map", id="CEexecutormap20")))((("Execu
 include::code/20-executors/demo_executor_map.py[tags=EXECUTOR_MAP]
 ----
 ====
-<1> Essa função simplesmente imprime quaisquer argumentos que receba, precedidos pelo momento da execução no formato `[HH:MM:SS]`.
+<1> Essa função exibe o momento da execução no formato `[HH:MM:SS]` e os argumentos recebidos.
 <2> `loiter` não faz nada além mostrar uma mensagem quanto inicia, dormir por `n` segundos, e mostrar uma mensagem quando termina; são usadas tabulações para indentar as mensagens de acordo com o valor de `n`.
 <3> `loiter` retorna `n * 10`, então podemos ver como coletar resultados.
 <4> Cria um `ThreadPoolExecutor` com três threads.
@@ -530,7 +530,7 @@ $ python3 demo_executor_map.py
 ----
 ====
 <1> Essa execução começou em 15:56:50.
-<2> A primeira thread executa `loiter(0)`, então vai dormir por 0s e retornar antes mesmo da segunda thread ter chance de começar, mas YMMV.footnote:[Acrônimo de _your mileage may vary_, (NT: algo como _sua quilometragem pode variar_, querendo dizer "seu caso pode ser diferente"): com threads, você nunca sabe a sequência exata de eventos que deveriam acontecer quase ao mesmo tempo; é possível que, em outra máquina, se veja `loiter(1)` começar antes de `loiter(0)` terminar, especialmente porque `sleep` sempre libera a GIL, então o Python pode mudar para outra thread mesmo se você dormir por 0s.]
+<2> A primeira thread executa `loiter(0)`, então vai dormir por 0s e retornar antes mesmo da segunda thread ter chance de começar, mas YMMV.footnote:[Acrônimo de _your mileage may vary_, algo como _sua quilometragem pode variar_, querendo dizer "seu caso pode ser diferente". Com threads, você nunca sabe a sequência exata de eventos que deveriam acontecer quase ao mesmo tempo; é possível que, em outra máquina, se veja `loiter(1)` começar antes de `loiter(0)` terminar, especialmente porque `sleep` sempre libera a GIL, então o Python pode mudar para outra thread mesmo se você dormir por 0s.]
 <3> `loiter(1)` e `loiter(2)` começam imediatamente (como o pool de threads tem três threads de trabalho, é possível rodar três funções de forma concorrente).
 <4> Isso mostra que o `results` retornado por `executor.map` é um gerador: nada até aqui é bloqueante, independente do número de tarefas e do valor de `max_workers`.
 <5> Como `loiter(0)` terminou, a primeira thread de trabalho está disponível para iniciar a quarta thread para `loiter(3)`.
@@ -542,7 +542,7 @@ $ python3 demo_executor_map.py
 
 A função `Executor.map` é fácil de usar,
 mas muitas vezes é preferível obter os resultados assim que estejam prontos, independente da ordem em que foram submetidos.
-Para fazer isso, precisamos de uma combinação do método `Executor.submit` e da função `futures.as_completed` como vimos no <<flags_threadpool_futures_ex>>. Vamos voltar a essa técnica na seção <<using_futures_as_completed_sec>>.
+Para fazer isso, precisamos de uma combinação do método `Executor.submit` e da função `futures.as_completed` como vimos no <<flags_threadpool_futures_ex>>. Vamos voltar a essa técnica na <<using_futures_as_completed_sec>>.
 
 [TIP]
 ====
@@ -567,7 +567,7 @@ flags2_sequential.py:: Um cliente HTTP sequencial com tratamento de erro correto
 
 flags2_threadpool.py:: Cliente HTTP concorrente, baseado em `futures.ThreadPoolExecutor`, para demonstrar o tratamento de erros e a integração da barra de progresso.
 
-flags2_asyncio.py:: Mesma funcionalidade do exemplo anterior, mas implementado com  `asyncio` e `httpx`. Isso será tratado na seção <<flags2_asyncio_sec>>, [.keep-together]#no capítulo <<async_ch>>.#
+flags2_asyncio.py:: Mesma funcionalidade do exemplo anterior, mas implementado com  `asyncio` e `httpx`. Isso será tratado na <<flags2_asyncio_sec>>, [.keep-together]#no <<async_ch>>.#
 
 [[careful_testing_clients]]
 [WARNING]
@@ -858,7 +858,7 @@ Sou pago para desenvolver aplicações, não sistemas operacionais. Não preciso
 
 Por isso acho o pacote `concurrent.futures` interessante: ele trata threads, processos, e filas como infraestrutura, algo a seu serviço, não algo que você precisa controlar diretamente. Claro, ele foi projetado pensando em tarefas simples, os assim chamado problemas embaraçosamente paralelos—ao contrário de sistemas operacionais ou servidores de banco de dados, como aponta Simionato naquela citação.
 
-Para problemas de concorrência "não embaraçosos", threads e travas também não são a solução. Ao nível do sistema operacional, as threads nunca vão desaparecer. Mas todas as linguagens de programação que achei excitantes nos últimos muitos anos fornecem abstrações de alto nível para concorrência, como demonstra o excelente livro de Paul Butcher, https://fpy.li/20-24[_Seven Concurrency Models in Seven Weeks_] (_Sete Modelos de Concorrência em Sete Semanas_) (EN). Go, Elixir, e Clojure estão entre elas. Erlang—a linguagem de implementação do Elixir—é um exemplo claro de uma linguagem projetada desde o início pensando em concorrência. Erlang não me excita por uma razão simples: acho sua sintaxe feia. O Python me acostumou mal.
+Para problemas de concorrência "não embaraçosos", threads e travas também não são a solução. Ao nível do sistema operacional, as threads nunca vão desaparecer. Mas todas as linguagens de programação que achei empolgantes nos últimos muitos anos fornecem abstrações de alto nível para concorrência, como demonstra o excelente livro de Paul Butcher, https://fpy.li/20-24[_Seven Concurrency Models in Seven Weeks_] (_Sete Modelos de Concorrência em Sete Semanas_) (EN). Go, Elixir, e Clojure estão entre elas. Erlang—a linguagem de implementação do Elixir—é um exemplo claro de uma linguagem projetada desde o início pensando em concorrência. Erlang não me excita por uma razão simples: acho sua sintaxe feia. O Python me acostumou mal.
 
 José Valim, antes um dos contribuidores centrais do Ruby on Rails, projetou o Elixir com uma sintaxe moderna e agradável. Como Lisp e Clojure, o Elixir implementa macros sintáticas. Isso é uma faca de dois gumes. Macros sintáticas permitem criar DSLs poderosas, mas a proliferação de sub-linguagens pode levar a bases de código incompatíveis e à fragmentação da comunidade. O Lisp se afogou em um mar de macros, cada empresa e grupo de desenvolvedores Lisp usando seu próprio dialeto arcano. A padronização em torno do Common Lisp resultou em uma linguagem inchada. Espero que José Valim inspire a comunidade do Elixir a evitar um destino semelhante. Até agora, o cenário parece bom. O invólucro de bancos de dados e gerador de queries https://fpy.li/20-25[Ecto] é muito agradável de usar: um grande exemplo do uso de macros para criar uma DSL—sigla de Domain-Specific Language, _Linguagem de Domínio Específico_—flexível mas amigável, para interagir com bancos de dados relacionais e não-relacionais.
 

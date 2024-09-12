@@ -526,7 +526,7 @@ True
 
 Como se vê, `abc.Sized` reconhece `Struggle` como uma `subclasse`, sem necessidade de registro, já que implementar o método especial chamado `+__len__+` é o suficiente (o método deve ser implementado com a sintaxe e semântica corretas - deve poder ser chamado sem argumentos e retornar um inteiro não-negativo indicando o "comprimento" do objeto; mas qualquer código que implemente um método com nome especial, como `+__len__+`, com uma sintaxe e uma semântica arbitrárias e incompatíveis tem problemas muitos maiores que esses).
 
-Então, aqui está minha mensagem de despedida: sempre que você estiver implementando uma classe que incorpore qualquer dos conceitos representados nas ABCs de `number`, `collections.abc` ou em outra framework que estiver usando, se assegure (caso necessário) de ser uma subclasse ou de registrar sua classe com a ABC correspondente. No início de seu programa usando uma biblioteca ou framework que definam classes que omitiram esse passo, registre você mesmo as classes. Daí, quando precisar verificar se (tipicamente) um argumento é, por exemplo, "uma sequência", verifique se:
+Então, aqui está minha mensagem de despedida: sempre que você estiver implementando uma classe que incorpore qualquer dos conceitos representados nas ABCs de `number`, `collections.abc` ou em outro framework que estiver usando, se assegure (caso necessário) de ser uma subclasse ou de registrar sua classe com a ABC correspondente. No início de seu programa usando uma biblioteca ou framework que definam classes que omitiram esse passo, registre você mesmo as classes. Daí, quando precisar verificar se (tipicamente) um argumento é, por exemplo, "uma sequência", verifique se:
 [source, python3]
 ----
 isinstance(the_arg, collections.abc.Sequence)
@@ -570,7 +570,7 @@ Normalmente _não_ é bom ter uma série de `if/elif/elif` com verificações de
 Por outro lado, não há problema em executar uma verificação com `isinstance` contra uma ABC se você quer garantir um contrato de API:
 "Cara, você tem que implementar isso se quiser me chamar," como costuma dizer o revisor técnico Lennart Regebro.
 Isso é especialmente útil em sistemas com arquitetura plug-in.
-Fora das frameworks, duck typing é muitas vezes mais simples e flexível que verificações de tipo.
+Fora dos frameworks, duck typing é muitas vezes mais simples e flexível que verificações de tipo.
 
 Por fim, em seu ensaio Alex reforça mais de uma vez a necessidade de coibir a criação de ABCs.
 Uso excessivo de ABCs imporia cerimônia a uma linguagem que se tornou popular por ser prática e pragmática.
@@ -578,7 +578,7 @@ Durante o processo de revisão do _Python Fluente_, Alex me enviou uma email:
 
 [quote]
 ____
-ABCs servem para encapsular conceitos muito genéricos, abstrações, introduzidos por uma framework - coisa como "uma sequência" e "um número exato".
+ABCs servem para encapsular conceitos muito genéricos, abstrações introduzidos por um framework - coisa como "uma sequência" e "um número exato".
 [Os leitores] quase certamente não precisam escrever alguma nova ABC, apenas usar as já existentes de forma correta, para obter 99% dos benefícios sem qualquer risco sério de design mal-feito.
 ____
 
@@ -710,7 +710,8 @@ O revisor técnico Jürgen Gmach esclareceu que o _duck typing_ fornece a forma 
 Essa chamada vai levantar um `TypeError` se `obj` não for _hashable_.
 
 Por outro lado, mesmo quando `isinstance(obj, Iterable)` retorna `False`,
-o Python ainda pode ser capaz de iterar sobre `obj` usando `+__getitem__+` com índices baseados em 0, como vimos em <<data_model>> e na seção  <<python_digs_seq_sec>>.
+o Python ainda pode ser capaz de iterar sobre `obj` usando `+__getitem__+` com índices baseados em 0,
+como vimos em <<data_model>> e na  <<python_digs_seq_sec>>.
 A documentação de
 https://docs.python.org/pt-br/3/library/collections.abc.html#collections.abc.Iterable[`collections.abc.Iterable`]
 afirma:
@@ -748,9 +749,7 @@ Para deixar claro aos usuário do `ADAM` o que se espera de um componente de "es
 
 Na bibliografia sobre estruturas de dados, "stack" e "queue" descrevem interfaces abstratas em termos dos arranjos físicos dos objetos.
 Vamos seguir o mesmo caminho e usar uma metáfora do mundo real para batizar nossa ABC:
-gaiolas de bingo e sorteadores de loteria são máquinas projetadas para escolher aleatoriamente itens de um conjunto, finito sem repetições, até o conjunto ser exaurido.
-
-A ABC vai ser chamada `Tombola`, seguindo o nome italiano do bingo (e do recipiente balançante que mistura os números)
+gaiolas de bingo e sorteadores de loteria são máquinas projetadas para escolher aleatoriamente itens de um conjunto, finito sem repetições, até o conjunto ser exaurido. Vamos chamar a ABC de `Tombola`, seguindo o nome italiano do bingo, e do recipiente giratório que mistura os números.
 
 A ABC `Tombola` tem quatro métodos. Os dois métodos abstratos são:
 
@@ -943,7 +942,7 @@ include::code/13-protocol-abc/lotto.py[tags=LOTTERY_BLOWER]
 ----
 ====
 [role="pagebreak-before less_space"]
-<1> O inicializador aceita qualquer iterável: o argumento é usado para construir uma lista.
+<1> O construtor aceita qualquer iterável: o argumento é usado para construir uma lista.
 <2> a função `random.randrange(…)` levanta um `ValueError` se a faixa de valores estiver vazia, então capturamos esse erro e trocamos por `LookupError`, para ser compatível com `Tombola`.
 <3> Caso contrário, o item selecionado aleatoriamente é retirado de `self._balls`.
 <4> Sobrepõe `loaded` para evitar a chamada a `inspect` (como `Tombola.loaded` faz no <<ex_tombola_abc>>). Podemos fazer isso mais rápido rápida trabalhando diretamente com `self._balls` -- não há necessidade de criar toda uma nova `tuple`.
@@ -1604,10 +1603,13 @@ vamos estudar algumas recomendações sobre essa prática.((("", startref="SPdes
 ==== Melhores práticas no desenvolvimento de protocolos
 
 Após((("static protocols", "best practices for protocol design"))) 10 anos de experiência com duck typing estático em Go, está claro que protocolos estreitos são mais úteis - muitas vezes tais protocolos tem um único método, raramente mais que um par de métodos.
-Martin Fowler escreveu um post definindo a https://fpy.li/13-33[_interface papel_]footnote:["papel" aqui é usado no sentido de incorporação de um personagem (NT)], uma ideia útil de ter em mente ao desenvolver protocolos.
+Martin Fowler descreve uma boa ideia para se ter em mente ao desenvolver protocolos: a https://fpy.li/13-33[Role Interface],
+(__interface papel__footnote:[NT: "papel" aqui é usado no sentido de incorporação de um personagem]). A ideia é que um protocolo deve ser definido em termos de um papel que um objeto pode desempenhar, e não em termos de uma classe específica.
 
-Além disso, algumas vezes vemos um protocolo definido próximo a uma função que o usa - ou seja, definido em "código do cliente" em vez de ser definido em uma biblioteca separada.
-Isso torna mais fácil criar novos tipos para chamar aquela função, algo bom para a extensibilidade e para testes com simulações ou protótipos.
+Além disso, é comum ver um protocolo definido próximo a uma função que o usa-ou seja,
+definido em "código do cliente" em vez de ser definido em uma biblioteca separada.
+Isso torna mais fácil criar novos tipos para chamar aquela função,
+bom para a extensibilidade e para testes com simulações ou protótipos.
 
 Ambas as práticas, protocolos estreitos e protocolos em código cliente, evitam um acoplamento muito firme, em acordo com o
 https://pt.wikipedia.org/wiki/Princ%C3%ADpio_da_segrega%C3%A7%C3%A3o_de_interface[Princípio da Segregação de Interface],
@@ -1757,7 +1759,7 @@ def to_complex(n: SupportsComplex) -> complex:
 
 No momento em que escrevo isso, o NumPy não tem dicas de tipo, então seus tipos numéricos são todos `Any`.footnote:[Os tipos numéricos do NumPy são todos registrados com as ABCs apropriadas de `numbers`, que o Mypy ignora.]
 Por outro lado, o Mypy de alguma maneira "sabe" que o `int` e o `float` embutidos podem ser convertidos para `complex`,
-apesar de, no _typeshed_, apenas a classe embutida `complex` ter o método `+__complex__+`.footnote:[Isso é uma mentira bem intencionada da parte do typeshed: a partir do Python 3.9, o tipo embutido `complex` na verdade não tem amis um método `+__complex__+`.]
+apesar de, no _typeshed_, apenas a classe embutida `complex` ter o método `+__complex__+`.footnote:[Isso é uma mentira bem intencionada da parte do typeshed: a partir do Python 3.9, o tipo embutido `complex` na verdade não tem mais um método `+__complex__+`.]
 
 Concluindo, apesar((("numeric types", "checking for convertibility"))) da impressão que a verificação de tipo para tipos numéricos não deveria ser difícil,
 a situação atual é a seguinte:
@@ -1832,7 +1834,7 @@ Eu também aprendi bastante em seu post
 https://fpy.li/13-43["Interfaces and Protocols"] (EN) ("Interfaces e Protocolos"),
 comparando `typing.Protocol` com `zope.interface` — um mecanismo mais antigo para definir interfaces em sistemas plug-in fracamente acoplados, usado no
 https://fpy.li/13-44[Plone CMS],
-na https://fpy.li/13-45[Pyramid web framework], e na framework de programação assíncrona
+na https://fpy.li/13-45[Pyramid web framework], e no framework de programação assíncrona
 https://fpy.li/13-46[Twisted],
 um projeto fundado por Glyph.footnote:[Agradeço ao revisor técnico Jürgen Gmach por ter recomentado o post "Interfaces and Protocols".]
 
